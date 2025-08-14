@@ -1,12 +1,13 @@
 import Nav from "../../components/home/Nav";
 import { useSelector } from "react-redux";
 import { useListNotificationsQuery, useMarkReadMutation } from "../../features/notification/notificationService";
-import Spinner from "../../components/Spinner";
+import Spinner from "../../components/skeleton/Spinner";
+import { getUserInfo } from "../../utils/jwtUtils";
 
 const Notifications = () => {
     const { userToken, user } = useSelector((s) => s.authReducer);
-    const userId = user?.uid;
-    const { data, isLoading, refetch } = useListNotificationsQuery({ userId, page: 0, size: 20 }, { skip: !userToken || !userId });
+    const userInfo = getUserInfo(user);
+    const { data, isLoading, refetch } = useListNotificationsQuery({ userId: userInfo?.id, page: 0, size: 20 }, { skip: !userToken || !userInfo?.id });
     const [markRead] = useMarkReadMutation();
     const items = data?.result?.items || [];
 

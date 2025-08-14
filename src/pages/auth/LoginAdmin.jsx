@@ -3,6 +3,7 @@ import { useAuthLoginMutation } from "../../features/auth/authService";
 import { setAdminToken } from "../../app/reducers/authReducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { isAdmin } from "../../utils/jwtUtils";
 
 const LoginAdmin = () => {
   const dispatch = useDispatch();
@@ -39,11 +40,8 @@ const LoginAdmin = () => {
   useEffect(() => {
     if (response.isSuccess) {
       const token = response?.data?.result?.token || response?.data?.token;
-      const user = response?.data?.result?.user || response?.data?.user;
-      const roles = user?.roles || [];
-      const isAdmin = Array.isArray(roles) && roles.includes('ROLE_ADMIN');
 
-      if (!isAdmin) {
+      if (!isAdmin(token)) {
         setAdminError('Sadece admin kullanıcılar bu panele erişebilir.');
         try { localStorage.removeItem('admin-token'); } catch {}
         return;
@@ -53,7 +51,7 @@ const LoginAdmin = () => {
       dispatch(setAdminToken(token));
       navigate('/dashboard/movies');
     }
-  }, [response.isSuccess, response?.data?.result?.token, response?.data?.token, response?.data?.result?.user, response?.data?.user, dispatch, navigate]);
+  }, [response.isSuccess, response?.data?.result?.token, response?.data?.token, dispatch, navigate]);
 
   return (
     <div className="bg-palette2 h-screen flex justify-center items-center">

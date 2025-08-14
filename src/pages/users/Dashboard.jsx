@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 import Nav from "../../components/home/Nav";
 import AccountList from "../../components/home/AccountList";
-import MovieCard from "../../components/home/MovieCard";
-import { useGetPreferencesQuery, useUpdatePreferencesMutation, useGetProfileQuery } from "../../features/user/userService";
+import MovieCardWithId from "../../components/home/MovieCardWithId";
+import { useGetPreferencesQuery, useUpdatePreferencesMutation, useGetProfileQuery, useUpdateProfileMutation, useSoftDeleteUserMutation } from "../../features/user/userService";
 import { useGetGenresQuery } from "../../features/genre/genresService";
 import { useListWatchQuery, useListFavoriteQuery } from "../../features/list/listService";
 
 
 const Dashboard = () => {
   const { data: profileResp, isLoading: profileLoading } = useGetProfileQuery();
-  const { data: prefsResp, isLoading: prefsLoading, refetch } = useGetPreferencesQuery();
+  const { data: prefsResp, isLoading: prefsLoading } = useGetPreferencesQuery();
   const [updatePrefs] = useUpdatePreferencesMutation();
+  const [updateProfile] = useUpdateProfileMutation();
+  const [softDeleteUser] = useSoftDeleteUserMutation();
   const { data: genresResp, isLoading: genresLoading } = useGetGenresQuery();
   
   // Watch and Favorite lists
@@ -24,17 +26,39 @@ const Dashboard = () => {
   const [selectedGenres, setSelectedGenres] = useState(new Set());
   const [isUpdating, setIsUpdating] = useState(false);
   
+  // Profile editing state
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    name: "",
+    surname: "",
+    email: ""
+  });
+  
   // Initialize selected genres when data loads
   useEffect(() => {
-    const initialGenres = profile?.preferredGenreIds || prefsResp?.result || [];
+    const initialGenres = prefsResp?.result || profile?.preferredGenreIds || [];
     setSelectedGenres(new Set(initialGenres));
-  }, [profile?.preferredGenreIds, prefsResp?.result]);
+  }, [prefsResp?.result, profile?.preferredGenreIds]);
+  
+  // Initialize profile form when profile loads
+  useEffect(() => {
+    if (profile) {
+      setProfileForm({
+        name: profile.name || "",
+        surname: profile.surname || "",
+        email: profile.email || ""
+      });
+    }
+  }, [profile]);
   
   // List data
-  const watchList = watchResp?.result || [];
-  const favoriteList = favoriteResp?.result || [];
+  const watchList = watchResp?.result?.items || [];
+  const favoriteList = favoriteResp?.result?.items || [];
 
   const toggle = async (id) => {
+    // Store original state for potential rollback
+    const originalSelected = new Set(selectedGenres);
+    
     // Optimistic update for instant feedback
     const newSelected = new Set(selectedGenres);
     if (newSelected.has(id)) {
@@ -46,15 +70,39 @@ const Dashboard = () => {
     
     try {
       setIsUpdating(true);
-      await updatePrefs(Array.from(newSelected));
-      // Refetch to get latest data from backend
-      refetch();
+      const result = await updatePrefs(Array.from(newSelected)).unwrap();
+      console.log('Preferences updated successfully:', result);
+      // RTK Query will automatically invalidate and refetch due to tags
     } catch (error) {
-      // Revert on error
-      setSelectedGenres(selectedGenres);
+      // Revert on error - use original state
+      setSelectedGenres(originalSelected);
       console.error('Failed to update preferences:', error);
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const onUpdateProfile = async () => {
+    try {
+      await updateProfile(profileForm).unwrap();
+      setIsEditingProfile(false);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      alert('Failed to update profile: ' + (error.data?.message || error.message));
+    }
+  };
+
+  const onDeleteAccount = async () => {
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone!')) {
+      if (window.confirm('Last warning: This will permanently delete all your data. Are you absolutely sure?')) {
+        try {
+          await softDeleteUser(profile.id).unwrap();
+          localStorage.removeItem('user-token');
+          window.location.href = '/';
+        } catch (error) {
+          alert('Failed to delete account: ' + (error.data?.message || error.message));
+        }
+      }
     }
   };
 
@@ -98,6 +146,20 @@ const Dashboard = () => {
                     Account Information
                     <div className="absolute -bottom-2 left-0 w-16 h-1 netflix-gradient"></div>
                   </h2>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setIsEditingProfile(true)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      Edit Profile
+                    </button>
+                    <button
+                      onClick={onDeleteAccount}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      Delete Account
+                    </button>
+                  </div>
                 </div>
                 {profileLoading ? (
                   <div className="flex items-center justify-center py-8">
@@ -214,7 +276,7 @@ const Dashboard = () => {
                     {watchList.length > 0 ? (
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                         {watchList.map(item => (
-                          <MovieCard key={item.id} movie={item.movie} />
+                          <MovieCardWithId key={item.id} movieId={item.movieId} />
                         ))}
                       </div>
                     ) : (
@@ -252,7 +314,7 @@ const Dashboard = () => {
                     {favoriteList.length > 0 ? (
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                         {favoriteList.map(item => (
-                          <MovieCard key={item.id} movie={item.movie} />
+                          <MovieCardWithId key={item.id} movieId={item.movieId} />
                         ))}
                       </div>
                     ) : (
@@ -269,6 +331,69 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      {isEditingProfile && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+            <h3 className="text-xl font-bold mb-6 text-gray-800">Edit Profile</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-600 mb-2">Name</label>
+                <input
+                  type="text"
+                  value={profileForm.name}
+                  onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="Enter your name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-600 mb-2">Surname</label>
+                <input
+                  type="text"
+                  value={profileForm.surname}
+                  onChange={(e) => setProfileForm({...profileForm, surname: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="Enter your surname"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-600 mb-2">Email</label>
+                <input
+                  type="email"
+                  value={profileForm.email}
+                  onChange={(e) => setProfileForm({...profileForm, email: e.target.value})}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="Enter your email"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-8">
+              <button
+                onClick={onUpdateProfile}
+                className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-indigo-600 hover:to-purple-700 transition-all duration-200"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={() => {
+                  setIsEditingProfile(false);
+                  // Reset form to original values
+                  setProfileForm({
+                    name: profile?.name || "",
+                    surname: profile?.surname || "",
+                    email: profile?.email || ""
+                  });
+                }}
+                className="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

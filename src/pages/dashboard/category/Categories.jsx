@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import ScreenHeader from "../../components/ScreenHeader";
-import Wrapper from "./Wrapper";
+import ScreenHeader from "../../../components/ScreenHeader";
+import Wrapper from "../Wrapper";
 import { BsPlusLg } from "react-icons/bs";
-import { clearMessage, setSuccess } from "../../app/reducers/globalReducer";
-import { useGetGenresQuery, useDeleteGenreMutation } from "../../features/genre/genresService";
-import Spinner from "../../components/Spinner";
-import Pagination from "../../components/Pagination";
+import { clearMessage, setSuccess } from "../../../app/reducers/globalReducer";
+import { useGetGenresQuery, useDeleteGenreMutation } from "../../../features/genre/genresService";
+import Spinner from "../../../components/skeleton/Spinner";
+import Pagination from "../../../components/skeleton/Pagination";
 
 const Categories = () => {
   const { success } = useSelector((state) => state.globalReducer);

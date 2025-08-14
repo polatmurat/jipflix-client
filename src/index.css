@@ -71,7 +71,6 @@
     @apply text-lg capitalize font-medium;
   }
   
-  /* Modern button improvements */
   .btn {
     @apply transition-all duration-300 ease-in-out;
   }
@@ -80,7 +79,6 @@
     @apply transform -translate-y-0.5 shadow-lg;
   }
   
-  /* Netflix style gradient underline */
   .netflix-gradient {
     @apply bg-gradient-to-r from-red-600 to-red-500 rounded-full;
   }

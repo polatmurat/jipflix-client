@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import Wrapper from "./Wrapper";
 import ScreenHeader from "../../components/ScreenHeader";
-import Spinner from "../../components/Spinner";
-import Pagination from "../../components/Pagination";
+import Spinner from "../../components/skeleton/Spinner";
+import Pagination from "../../components/skeleton/Pagination";
 import { useListErrorsQuery, useListAuditsQuery } from "../../features/log/logService";
 import { useState as useReactState } from 'react';
 import LogsFilter from "../../components/admin/LogsFilter";

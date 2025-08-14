@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Wrapper from "./Wrapper";
 import ScreenHeader from "../../components/ScreenHeader";
-import Spinner from "../../components/Spinner";
+import Spinner from "../../components/skeleton/Spinner";
 import { useCreateNotificationMutation, useBroadcastNotificationMutation } from "../../features/notification/notificationService";
 import UserAutocomplete from "../../components/admin/UserAutocomplete";
 import MovieAutocomplete from "../../components/admin/MovieAutocomplete";

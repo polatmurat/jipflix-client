@@ -5,12 +5,13 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import MovieSearchModal from "./MovieSearchModal";
+import { getUserInfo } from "../../utils/jwtUtils";
 
 const Nav = () => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const {userToken, user} = useSelector((state) => state.authReducer)
-  const userId = user?.uid;
-  const { data: notifResp } = useListNotificationsQuery(userToken && userId ? { userId, page: 0, size: 20 } : skipToken);
+  const userInfo = getUserInfo(user);
+  const { data: notifResp } = useListNotificationsQuery(userToken && userInfo?.id ? { userId: userInfo.id, page: 0, size: 20 } : skipToken);
   const unreadCount = (notifResp?.result?.items || []).filter(n => !n.read).length;
 
   return (
@@ -40,7 +41,7 @@ const Nav = () => {
             </li> */}
             {userToken ? <li className="nav__item text-black">
               <Link to="/user" className="nav__link capitalize">
-                {user?.sub}
+                {userInfo?.displayName}
               </Link>
             </li> : <li className="nav__item text-black">
               <Link to="/login" className="nav__link">

@@ -38,14 +38,42 @@ const userService = createApi({
       query: () => ({ url: 'users/profile', method: 'GET' }),
       providesTags: ['Me']
     }),
+
     deleteUser: builder.mutation({
       query: (id) => ({ url: `users/${id}`, method: 'DELETE' }),
       invalidatesTags: [{ type: 'Users', id: 'LIST' }]
+    }),
+    softDeleteUser: builder.mutation({
+      query: (id) => ({ url: `users/${id}/soft-delete`, method: 'PUT' }),
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }]
+    }),
+    getDeletedUsers: builder.query({
+      query: () => ({ url: 'users/deleted', method: 'GET' }),
+      providesTags: [{ type: 'Users', id: 'DELETED' }]
+    }),
+    updateProfile: builder.mutation({
+      query: (data) => ({ url: 'users/profile', method: 'PUT', body: data }),
+      invalidatesTags: ['Me']
+    }),
+    adminUpdateUser: builder.mutation({
+      query: ({ id, data }) => ({ url: `users/${id}`, method: 'PUT', body: data }),
+      invalidatesTags: [{ type: 'Users', id: 'LIST' }, 'Me']
     })
   })
 });
 
-export const { useGetPreferencesQuery, useUpdatePreferencesMutation, useListUsersQuery, useSearchUsersQuery, useGetProfileQuery, useDeleteUserMutation } = userService;
+export const { 
+  useGetPreferencesQuery, 
+  useUpdatePreferencesMutation, 
+  useListUsersQuery, 
+  useSearchUsersQuery, 
+  useGetProfileQuery, 
+  useDeleteUserMutation,
+  useSoftDeleteUserMutation,
+  useGetDeletedUsersQuery,
+  useUpdateProfileMutation,
+  useAdminUpdateUserMutation
+} = userService;
 export default userService;
 
 

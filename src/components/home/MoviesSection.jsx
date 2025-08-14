@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useSearchMoviesQuery } from "../../features/movie/movieService";
 import MovieCard from "./MovieCard";
-import Spinner from "../Spinner";
+import Spinner from "../skeleton/Spinner";
 import { Link } from "react-router-dom";
 
 const MoviesSection = () => {

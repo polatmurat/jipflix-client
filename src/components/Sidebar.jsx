@@ -4,6 +4,7 @@ import {
   BsXCircle,
   BsFilm,
   BsBell,
+  BsActivity,
 } from "react-icons/bs";
 import { PiBroadcast } from "react-icons/pi";
 import { RiMovie2Line } from "react-icons/ri";
@@ -45,6 +46,10 @@ const Sidebar = ({ side, closeSidebar }) => {
         <li className="px-4 py-3 cursor-pointer transition-all text-white flex items-center hover:bg-palette2">
           <BsPeople className="mr-2 text-lg inline-block" />
           <Link to="/dashboard/users" className="text-base capitalize">Users</Link>
+        </li>
+        <li className="px-4 py-3 cursor-pointer transition-all text-white flex items-center hover:bg-palette2">
+          <BsActivity className="mr-2 text-lg inline-block" />
+          <Link to="/dashboard/health" className="text-base capitalize">System Health</Link>
         </li>
         <li className="px-4 py-3 cursor-pointer transition-all text-white flex items-center hover:bg-palette2">
           <BsBell className="mr-2 text-lg inline-block" />

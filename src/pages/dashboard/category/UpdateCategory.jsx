@@ -1,12 +1,12 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import ScreenHeader from "../../components/ScreenHeader";
-import Wrapper from "./Wrapper";
+import ScreenHeader from "../../../components/ScreenHeader";
+import Wrapper from "../Wrapper";
 import { BsArrowLeft } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSuccess } from "../../app/reducers/globalReducer";
-import { useGetGenresQuery, useUpdateGenreMutation } from "../../features/genre/genresService";
-import Spinner from "../../components/Spinner";
+import { setSuccess } from "../../../app/reducers/globalReducer";
+import { useGetGenresQuery, useUpdateGenreMutation } from "../../../features/genre/genresService";
+import Spinner from "../../../components/skeleton/Spinner";
 
 const UpdateCategory = () => {
   const dispatch = useDispatch();

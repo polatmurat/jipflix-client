@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import ScreenHeader from "../../components/ScreenHeader";
-import Wrapper from "./Wrapper";
+import ScreenHeader from "../../../components/ScreenHeader";
+import Wrapper from "../Wrapper";
 import { BsArrowLeft } from "react-icons/bs";
 import { useState } from "react";
-import { useCreateDirectorMutation } from "../../features/director/directorsService";
+import { useCreateDirectorMutation } from "../../../features/director/directorsService";
 
 const CreateDirector = () => {
   const navigate = useNavigate();

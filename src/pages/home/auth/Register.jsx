@@ -10,6 +10,7 @@ import { setUserToken } from "../../../app/reducers/authReducer";
 import { setSuccess } from "../../../app/reducers/globalReducer";
 import { useForm } from "../../../hooks/Form";
 import { ShowError } from "../../../utils/ShowError";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
 const Register = () => {
   const [errors, setErrors] = useState([]);
@@ -239,17 +240,21 @@ const Register = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                 <button
                   type="button"
+                  aria-label="Continue with Google"
                   onClick={() => (window.location.href = `${import.meta.env.VITE_API_URL ?? 'https://api.jipflix.com'}/oauth2/authorization/google`)}
-                  className="btn btn-outline w-full"
+                  className="w-full inline-flex items-center justify-center gap-2 border border-red-500 text-red-600 hover:bg-red-50 rounded-md px-4 py-2 transition-colors"
                 >
-                  Google ile Kaydol / Giriş
+                  <FaGoogle className="text-lg" />
+                  <span>Google ile Kaydol / Giriş</span>
                 </button>
                 <button
                   type="button"
+                  aria-label="Continue with GitHub"
                   onClick={() => (window.location.href = `${import.meta.env.VITE_API_URL ?? 'https://api.jipflix.com'}/oauth2/authorization/github`)}
-                  className="btn btn-outline w-full"
+                  className="w-full inline-flex items-center justify-center gap-2 border border-gray-800 text-gray-800 hover:bg-gray-100 rounded-md px-4 py-2 transition-colors"
                 >
-                  GitHub ile Kaydol / Giriş
+                  <FaGithub className="text-lg" />
+                  <span>GitHub ile Kaydol / Giriş</span>
                 </button>
               </div>
               <div>

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Wrapper from "./Wrapper";
+import Wrapper from "../Wrapper";
 import { BsPlusLg } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { clearMessage } from "../../app/reducers/globalReducer";
-import ScreenHeader from "../../components/ScreenHeader";
-import Spinner from "../../components/Spinner";
-import Pagination from "../../components/Pagination";
-import { useListMoviesQuery, useDeleteMovieMutation, useSearchMoviesQuery } from "../../features/movie/movieService";
+import { clearMessage } from "../../../app/reducers/globalReducer";
+import ScreenHeader from "../../../components/ScreenHeader";
+import Spinner from "../../../components/skeleton/Spinner";
+import Pagination from "../../../components/skeleton/Pagination";
+import { useListMoviesQuery, useDeleteMovieMutation, useSearchMoviesQuery } from "../../../features/movie/movieService";
 
 const Movies = () => {
   let { page } = useParams();

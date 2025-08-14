@@ -18,6 +18,14 @@ const directorsService = createApi({
       query: () => ({ url: 'directors', method: 'GET' }),
       providesTags: [{ type: 'Directors', id: 'LIST' }]
     }),
+    getDirectorsPaged: builder.query({
+      query: ({ term = '', page = 0, size = 20, sortBy = 'id', sortDir = 'asc' } = {}) => ({
+        url: 'directors/paged',
+        method: 'GET',
+        params: { term, page, size, sortBy, sortDir }
+      }),
+      providesTags: [{ type: 'Directors', id: 'LIST' }]
+    }),
     createDirector: builder.mutation({
       query: (body) => ({ url: 'directors', method: 'POST', body }),
       invalidatesTags: [{ type: 'Directors', id: 'LIST' }]
@@ -33,7 +41,7 @@ const directorsService = createApi({
   })
 });
 
-export const { useGetDirectorsQuery, useCreateDirectorMutation, useUpdateDirectorMutation, useDeleteDirectorMutation } = directorsService;
+export const { useGetDirectorsQuery, useGetDirectorsPagedQuery, useCreateDirectorMutation, useUpdateDirectorMutation, useDeleteDirectorMutation } = directorsService;
 export default directorsService;
 
 

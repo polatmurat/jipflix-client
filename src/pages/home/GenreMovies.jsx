@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import Nav from "../../components/home/Nav";
-import Spinner from "../../components/Spinner";
-import Pagination from "../../components/Pagination";
+import Spinner from "../../components/skeleton/Spinner";
+import Pagination from "../../components/skeleton/Pagination";
 import MovieCard from "../../components/home/MovieCard";
 import { useSearchMoviesQuery } from "../../features/movie/movieService";
 import { useGetGenresQuery } from "../../features/genre/genresService";

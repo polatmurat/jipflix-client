@@ -1,14 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
-import ScreenHeader from "../../components/ScreenHeader";
-import Wrapper from "./Wrapper";
+import ScreenHeader from "../../../components/ScreenHeader";
+import Wrapper from "../Wrapper";
 import { BsArrowLeft } from "react-icons/bs";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useCreateMovieMutation } from "../../features/movie/movieService";
-import { useGetDirectorsQuery } from "../../features/director/directorsService";
-import { useGetGenresQuery } from "../../features/genre/genresService";
-import Spinner from "../../components/Spinner";
-import ImageUploader from "../../components/admin/ImageUploader";
+import { useCreateMovieMutation } from "../../../features/movie/movieService";
+import { useGetDirectorsQuery } from "../../../features/director/directorsService";
+import { useGetGenresQuery } from "../../../features/genre/genresService";
+import Spinner from "../../../components/skeleton/Spinner";
+import ImageUploader from "../../../components/admin/ImageUploader";
 
 const CreateMovie = () => {
   const dispatch = useDispatch();

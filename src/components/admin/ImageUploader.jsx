@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUploadMediaMutation } from "../../features/media/mediaService";
-import Spinner from "../Spinner";
+import Spinner from "../skeleton/Spinner";
 
 const ImageUploader = ({ value, onChange }) => {
   const [preview, setPreview] = useState(value || "");

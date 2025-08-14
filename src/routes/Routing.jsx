@@ -1,22 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginAdmin from "../pages/auth/LoginAdmin";
-import Movies from "../pages/dashboard/Movies";
+import Movies from "../pages/dashboard/movie/Movies";
 import Private from "./Private";
 import Public from "./Public";
-import Categories from "../pages/dashboard/Categories";
-import CreateCategory from "../pages/dashboard/CreateCategory";
-import UpdateCategory from "../pages/dashboard/UpdateCategory";
-import Directors from "../pages/dashboard/Directors";
-import CreateDirector from "../pages/dashboard/CreateDirector";
-import UpdateDirector from "../pages/dashboard/UpdateDirector";
-import CreateMovie from "../pages/dashboard/CreateMovie";
-import UpdateMovie from "../pages/dashboard/UpdateMovie";
+import Categories from "../pages/dashboard/category/Categories";
+import CreateCategory from "../pages/dashboard/category/CreateCategory";
+import UpdateCategory from "../pages/dashboard/category/UpdateCategory";
+import Directors from "../pages/dashboard/director/Directors";
+import CreateDirector from "../pages/dashboard/director/CreateDirector";
+import UpdateDirector from "../pages/dashboard/director/UpdateDirector";
+import CreateMovie from "../pages/dashboard/movie/CreateMovie";
+import UpdateMovie from "../pages/dashboard/movie/UpdateMovie";
 import Home from "../pages/home/Home";
 import Login from "../pages/home/auth/Login";
 import Register from "../pages/home/auth/Register";
 import Dashboard from "../pages/users/Dashboard";
 import Notifications from "../pages/users/Notifications";
-import Users from "../pages/dashboard/Users";
+import Users from "../pages/dashboard/user/Users";
+import SystemHealth from "../pages/dashboard/SystemHealth";
 import SendNotification from "../pages/dashboard/SendNotification";
 import Logs from "../pages/dashboard/Logs";
 import UserRoute from "./UserRoute";
@@ -134,6 +135,14 @@ const Routing = () => {
             element={
               <Private>
                 <Users />
+              </Private>
+            }
+          />
+          <Route
+            path="health"
+            element={
+              <Private>
+                <SystemHealth />
               </Private>
             }
           />

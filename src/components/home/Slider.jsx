@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
 import { useGetGenresQuery } from "../../features/genre/genresService";
-import Spinner from "../Spinner";
+import Spinner from "../skeleton/Spinner";
 import "swiper/css";
 import "swiper/css/pagination";
 

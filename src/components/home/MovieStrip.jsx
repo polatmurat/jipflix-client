@@ -55,7 +55,7 @@ const MovieStrip = ({ title, items = [], isLoading = false }) => {
             virtualIndex={index}
             className="w-full overflow-hidden rounded-xl relative text-white group cursor-pointer transition-all duration-200 hover:shadow-lg"
           >
-            <div className="relative w-full h-full">
+            <Link to={`/movie/${movie.id}`} className="relative w-full h-full">
               <div className="w-full h-full rounded-xl overflow-hidden absolute inset-0 shadow-lg">
                 {movie.imageUrl ? (
                   <img
@@ -83,7 +83,7 @@ const MovieStrip = ({ title, items = [], isLoading = false }) => {
                   )}
                 </div>
               </div>
-            </div>
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

@@ -1,7 +1,34 @@
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
+import { useGetMovieQuery } from "../../features/movie/movieService";
+import Skeleton from "../skeleton/Skeleton";
+import Thumbnail from "../skeleton/Thumbnail";
 
-const MovieCard = ({ movie }) => {
+const MovieCardWithId = ({ movieId }) => {
+  const { data: movieResp, isLoading, error } = useGetMovieQuery(movieId);
+  const movie = movieResp?.result;
+
+  if (isLoading) {
+    return (
+      <div className="w-full">
+        <Skeleton>
+          <Thumbnail />
+        </Skeleton>
+      </div>
+    );
+  }
+
+  if (error || !movie) {
+    return (
+      <div className="w-full h-[200px] bg-gray-200 rounded-xl flex items-center justify-center text-gray-500">
+        <div className="text-center">
+          <div className="text-2xl mb-2">🎬</div>
+          <div className="text-sm">Movie not found</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Link to={`/movie/${movie.id}`} className="w-full overflow-hidden rounded-xl relative text-white group cursor-pointer transition-all duration-200 hover:shadow-lg">
       <div className="relative w-full h-[200px]">
@@ -37,15 +64,8 @@ const MovieCard = ({ movie }) => {
   );
 };
 
-MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string,
-    rating: PropTypes.number,
-  }).isRequired,
+MovieCardWithId.propTypes = {
+  movieId: PropTypes.number.isRequired,
 };
 
-export default MovieCard;
-
-
+export default MovieCardWithId;

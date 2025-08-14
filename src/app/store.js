@@ -10,6 +10,7 @@ import userService from '../features/user/userService';
 import mediaService from '../features/media/mediaService';
 import logService from '../features/log/logService';
 import listService from '../features/list/listService';
+import healthService from '../features/health/healthService';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     [mediaService.reducerPath]: mediaService.reducer,
     [logService.reducerPath]: logService.reducer,
     [listService.reducerPath]: listService.reducer,
+    [healthService.reducerPath]: healthService.reducer,
     authReducer: authReducer, // hap info: no need to put this in brackets as it's a string identifier
     globalReducer: globalReducer,
   },
@@ -35,4 +37,5 @@ export const store = configureStore({
     .concat(mediaService.middleware)
     .concat(logService.middleware)
     .concat(listService.middleware)
+    .concat(healthService.middleware)
 });

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Wrapper from "./Wrapper";
+import Wrapper from "../Wrapper";
 import { BsPlusLg } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { clearMessage } from "../../app/reducers/globalReducer";
-import ScreenHeader from "../../components/ScreenHeader";
-import Spinner from "../../components/Spinner";
-import { useGetDirectorsQuery, useDeleteDirectorMutation } from "../../features/director/directorsService";
-import Pagination from "../../components/Pagination";
+import { clearMessage } from "../../../app/reducers/globalReducer";
+import ScreenHeader from "../../../components/ScreenHeader";
+import Spinner from "../../../components/skeleton/Spinner";
+import { useGetDirectorsPagedQuery, useDeleteDirectorMutation } from "../../../features/director/directorsService";
+import Pagination from "../../../components/skeleton/Pagination";
 
 const Directors = () => {
   const dispatch = useDispatch();
@@ -15,9 +15,10 @@ const Directors = () => {
   const [query, setQuery] = useState("");
   const page = pageParam ? parseInt(pageParam) : 1;
   const perPage = 12;
-  const { data, isLoading, refetch } = useGetDirectorsQuery();
+  const { data, isLoading, refetch } = useGetDirectorsPagedQuery({ term: query, page: page - 1, size: perPage, sortBy: 'id', sortDir: 'desc' });
   const [deleteDirector] = useDeleteDirectorMutation();
-  const items = data?.result || [];
+  const paged = data?.result;
+  const items = paged?.items || [];
 
   useEffect(() => {
     return () => { dispatch(clearMessage()); };
@@ -60,12 +61,9 @@ const Directors = () => {
                 </tr>
               </thead>
               <tbody>
-                {(() => {
-                  const all = items || [];
-                  const filtered = query ? all.filter(x => x.name.toLowerCase().includes(query.toLowerCase())) : all;
-                  const start = (page - 1) * perPage;
-                  const rows = filtered.slice(start, start + perPage);
-                  return rows.map((d) => (
+                 {(() => {
+                   const all = items || [];
+                   return all.map((d) => (
                   <tr key={d.id} className="odd:bg-gray-800">
                     <td className="p-3 capitalize text-sm font-normal text-gray-400">{d.name}</td>
                     <td className="p-3 capitalize text-sm font-normal text-gray-400">
@@ -80,7 +78,7 @@ const Directors = () => {
               </tbody>
             </table>
           </div>
-          <Pagination page={page} perPage={perPage} count={(query ? items.filter(x => x.name.toLowerCase().includes(query.toLowerCase())).length : items.length)} path="dashboard/directors" />
+           <Pagination page={page} perPage={perPage} count={paged?.totalElements || 0} path="dashboard/directors" />
         </>
       )}
     </Wrapper>

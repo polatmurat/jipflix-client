@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import ScreenHeader from "../../components/ScreenHeader";
-import Wrapper from "./Wrapper";
+import ScreenHeader from "../../../components/ScreenHeader";
+import Wrapper from "../Wrapper";
 import { BsArrowLeft } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useCreateGenreMutation } from "../../features/genre/genresService";
-import { setSuccess } from "../../app/reducers/globalReducer";
+import { useCreateGenreMutation } from "../../../features/genre/genresService";
+import { setSuccess } from "../../../app/reducers/globalReducer";
 
 const CreateCategory = () => {
   const dispatch = useDispatch();

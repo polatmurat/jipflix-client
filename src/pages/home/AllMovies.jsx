@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import Nav from "../../components/home/Nav";
 import MovieSearchHeader from "../../components/home/MovieSearchHeader";
 import MovieCard from "../../components/home/MovieCard";
-import Spinner from "../../components/Spinner";
-import Pagination from "../../components/Pagination";
+import Spinner from "../../components/skeleton/Spinner";
+import Pagination from "../../components/skeleton/Pagination";
 import { useSearchMoviesQuery } from "../../features/movie/movieService";
 
 const AllMovies = () => {
@@ -51,7 +51,6 @@ const AllMovies = () => {
       <Nav />
       <div className="mt-[100px] pb-16 bg-gray-50 min-h-screen">
         <div className="container">
-          {/* Header Section */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-800 mb-2 relative">
               All Movies
@@ -62,10 +61,8 @@ const AllMovies = () => {
             </p>
           </div>
 
-          {/* Search Section */}
           <MovieSearchHeader state={state} setState={setState} onSearch={onSearch} />
 
-          {/* Loading State */}
           {isFetching && (
             <div className="flex items-center justify-center py-16">
               <div className="text-center">
@@ -75,10 +72,8 @@ const AllMovies = () => {
             </div>
           )}
 
-          {/* Content */}
           {!isFetching && (
             <>
-              {/* Empty State */}
               {items.length === 0 && (
                 <div className="bg-white rounded-xl shadow-lg p-12 text-center">
                   <div className="text-gray-400 text-6xl mb-6">🎬</div>
@@ -89,7 +84,6 @@ const AllMovies = () => {
                 </div>
               )}
 
-              {/* Movies Grid */}
               {items.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                   {items.map((m) => (
@@ -98,7 +92,6 @@ const AllMovies = () => {
                 </div>
               )}
 
-              {/* Pagination */}
               {total > size && (
                 <div className="mt-12 flex justify-center">
                   <div className="bg-white rounded-xl shadow-lg p-4">

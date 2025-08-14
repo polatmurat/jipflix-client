@@ -1,8 +1,8 @@
 import Nav from "../../components/home/Nav";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useGetMovieQuery, useListCommentsQuery, useAddCommentMutation, useRateMovieMutation, useRecommendByGenresQuery } from "../../features/movie/movieService";
 import { useGetGenresQuery } from "../../features/genre/genresService";
-import Spinner from "../../components/Spinner";
+import Spinner from "../../components/skeleton/Spinner";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import AddToListButtons from "../../components/home/AddToListButtons";
@@ -81,26 +81,30 @@ const MovieDetails = () => {
                     <span className="text-sm text-gray-500">/10</span>
                   </div>
                 </div>
-                <div className="flex space-x-1">
-                  {[1,2,3,4,5,6,7,8,9,10].map(s => (
-                    <button 
-                      key={s} 
-                      className="group relative hover:scale-105 transition-transform duration-200" 
-                      onClick={() => onRate(s)}
-                    >
-                      <svg 
-                        className="w-5 h-5 text-gray-300 group-hover:text-yellow-400 transition-colors duration-200" 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
+                {userToken ? (
+                  <div className="flex space-x-1">
+                    {[1,2,3,4,5,6,7,8,9,10].map(s => (
+                      <button 
+                        key={s} 
+                        className="group relative hover:scale-105 transition-transform duration-200" 
+                        onClick={() => onRate(s)}
                       >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <span className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        {s}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                        <svg 
+                          className="w-5 h-5 text-gray-300 group-hover:text-yellow-400 transition-colors duration-200" 
+                          fill="currentColor" 
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <span className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          {s}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-500">Please <Link to="/login" className="text-indigo-600 hover:underline">login</Link> to rate</div>
+                )}
               </div>
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div>
@@ -113,7 +117,11 @@ const MovieDetails = () => {
                 </div>
                 <div className="lg:flex-shrink-0">
                   <h3 className="font-semibold text-gray-800 mb-3">Add to Lists</h3>
-                  <AddToListButtons movieId={id} />
+                  {userToken ? (
+                    <AddToListButtons movieId={id} />
+                  ) : (
+                    <div className="text-sm text-gray-500">Please <Link to="/login" className="text-indigo-600 hover:underline">login</Link> to add to your lists</div>
+                  )}
                 </div>
               </div>
               <div>
@@ -126,18 +134,22 @@ const MovieDetails = () => {
                     </div>
                   ))}
                 </div>
-                <form onSubmit={submitComment} className="space-y-3">
-                  <input 
-                    type="text" 
-                    value={text} 
-                    onChange={(e) => setText(e.target.value)} 
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" 
-                    placeholder="Write a comment..." 
-                  />
-                  <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
-                    Send
-                  </button>
-                </form>
+                {userToken ? (
+                  <form onSubmit={submitComment} className="space-y-3">
+                    <input 
+                      type="text" 
+                      value={text} 
+                      onChange={(e) => setText(e.target.value)} 
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200" 
+                      placeholder="Write a comment..." 
+                    />
+                    <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+                      Send
+                    </button>
+                  </form>
+                ) : (
+                  <div className="text-sm text-gray-500">Please <Link to="/login" className="text-indigo-600 hover:underline">login</Link> to write a comment</div>
+                )}
               </div>
             </div>
           </div>

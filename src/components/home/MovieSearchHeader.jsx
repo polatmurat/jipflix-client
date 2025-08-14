@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 const MovieSearchHeader = ({ state, setState, onSearch }) => {
   const onChange = (e) => setState({ ...state, [e.target.name]: e.target.value });
   return (
@@ -56,16 +54,15 @@ const MovieSearchHeader = ({ state, setState, onSearch }) => {
           />
         </div>
         
-        {/* Sort By Toggle */}
         <div className="flex bg-white border border-gray-300 rounded-lg overflow-hidden">
           <button
             type="button"
             className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-              state.sortBy === 'id' 
+              state.sortBy === 'releaseYear' 
                 ? 'bg-indigo-600 text-white shadow-sm' 
                 : 'text-gray-700 hover:bg-gray-50'
             }`}
-            onClick={() => setState({ ...state, sortBy: 'id' })}
+            onClick={() => setState({ ...state, sortBy: 'releaseYear' })}
           >
             <span className="flex items-center space-x-1">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,7 +89,6 @@ const MovieSearchHeader = ({ state, setState, onSearch }) => {
           </button>
         </div>
         
-        {/* Sort Direction Toggle */}
         <div className="flex bg-white border border-gray-300 rounded-lg overflow-hidden">
           <button
             type="button"
