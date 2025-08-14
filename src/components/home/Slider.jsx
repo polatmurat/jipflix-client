@@ -10,6 +10,10 @@ const Slider = () => {
   const { data, isFetching } = useGetGenresQuery();
   const genres = data?.result || [];
 
+  // because of the prod paths resolve correctly
+  const images = import.meta.glob('/src/assets/images/genre/*.jpg', { eager: true, import: 'default' });
+  const getImg = (id) => images[`/src/assets/images/genre/${id}.jpg`] || '/logo-light.png';
+
   return isFetching ? (
     <div className="container h-[70vh] flex items-center justify-center">
       <Spinner />
@@ -30,7 +34,7 @@ const Slider = () => {
             <div className={`absolute inset-0 bg-no-repeat bg-cover `}>
               {" "}
               <img
-                src={`/src/assets/images/genre/${id}.jpg`}
+                src={getImg(id)}
                 alt="Slider Pictures"
                 className="w-full h-full object-cover"
               />
