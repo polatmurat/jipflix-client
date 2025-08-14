@@ -27,6 +27,7 @@ const LoginAdmin = () => {
   console.log("Response : ", response);
 
   const errors = response.error?.data?.errors ? response.error.data.errors : [];
+  const [adminError, setAdminError] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -38,11 +39,21 @@ const LoginAdmin = () => {
   useEffect(() => {
     if (response.isSuccess) {
       const token = response?.data?.result?.token || response?.data?.token;
+      const user = response?.data?.result?.user || response?.data?.user;
+      const roles = user?.roles || [];
+      const isAdmin = Array.isArray(roles) && roles.includes('ROLE_ADMIN');
+
+      if (!isAdmin) {
+        setAdminError('Sadece admin kullanıcılar bu panele erişebilir.');
+        try { localStorage.removeItem('admin-token'); } catch {}
+        return;
+      }
+
       localStorage.setItem("admin-token", token);
       dispatch(setAdminToken(token));
-      navigate('/dashboard/products');
+      navigate('/dashboard/movies');
     }
-  }, [response.isSuccess, response?.data?.result?.token, response?.data?.token, dispatch, navigate]);
+  }, [response.isSuccess, response?.data?.result?.token, response?.data?.token, response?.data?.result?.user, response?.data?.user, dispatch, navigate]);
 
   return (
     <div className="bg-palette2 h-screen flex justify-center items-center">
@@ -61,6 +72,11 @@ const LoginAdmin = () => {
               </p>
             </div>
           ))}
+        {adminError && (
+          <div>
+            <p className="alert-danger">{adminError}</p>
+          </div>
+        )}
 
         <div>
           <div className="mb-3">

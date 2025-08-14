@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 const Public = ({ children }) => {
   const { adminToken } = useSelector((state) => state.authReducer);
-  return adminToken ? <Navigate to="/dashboard/products" /> : children;
+  return adminToken ? <Navigate to="/dashboard/movies" /> : children;
 };
 
 export default Public;

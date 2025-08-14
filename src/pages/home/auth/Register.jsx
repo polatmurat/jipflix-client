@@ -235,6 +235,23 @@ const Register = () => {
                   className="btn btn-indigo w-full"
                 />
               </div>
+              <div className="my-4 text-center text-sm text-gray-500">or</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = `${import.meta.env.VITE_API_URL ?? 'https://api.jipflix.com'}/oauth2/authorization/google`)}
+                  className="btn btn-outline w-full"
+                >
+                  Google ile Kaydol / Giriş
+                </button>
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = `${import.meta.env.VITE_API_URL ?? 'https://api.jipflix.com'}/oauth2/authorization/github`)}
+                  className="btn btn-outline w-full"
+                >
+                  GitHub ile Kaydol / Giriş
+                </button>
+              </div>
               <div>
                 <p>
                   Already have an account ?{" "}

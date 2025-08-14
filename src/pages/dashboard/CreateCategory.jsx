@@ -4,7 +4,7 @@ import Wrapper from "./Wrapper";
 import { BsArrowLeft } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useCreateMutation } from "../../features/category/categoryService";
+import { useCreateGenreMutation } from "../../features/genre/genresService";
 import { setSuccess } from "../../app/reducers/globalReducer";
 
 const CreateCategory = () => {
@@ -12,7 +12,7 @@ const CreateCategory = () => {
   const navigate = useNavigate();
 
   const [state, setState] = useState("");
-  const [saveCategory, data] = useCreateMutation();
+  const [saveCategory, data] = useCreateGenreMutation();
   const errors = data?.error?.data?.errors ? data?.error?.data?.errors : [];
 
   const submitCategory = (event) => {
@@ -23,7 +23,7 @@ const CreateCategory = () => {
   useEffect(() => {
     if (data?.isSuccess) {
       dispatch(setSuccess(data?.data?.msg));
-      navigate("/dashboard/categories");
+       navigate("/dashboard/categories");
     }
   }, [data?.isSuccess]);
 
@@ -35,11 +35,11 @@ const CreateCategory = () => {
           className="btn-dark inline-flex items-center"
         >
           <BsArrowLeft className="mr-2" />
-          Category List
+           Genres List
         </Link>
       </ScreenHeader>
       <form className="w-full md:w-8/12" onSubmit={submitCategory}>
-        <h3 className="text-lg capitalize mb-3">Create Category</h3>
+         <h3 className="text-lg capitalize mb-3">Create Genre</h3>
         {errors.length > 0 &&
           errors.map((error, key) => (
             <div key={key} className="my-4">
@@ -53,13 +53,13 @@ const CreateCategory = () => {
             value={state}
             onChange={(e) => setState(e.target.value)}
             className="form-control"
-            placeholder="Category Name..."
+             placeholder="Genre Name..."
           />
         </div>
         <div className="mb-3 flex justify-center">
           <input
             type="submit"
-            value={data.isLoading ? "Loading..." : "Create Category"}
+             value={data.isLoading ? "Loading..." : "Create Genre"}
             className="btn-indigo"
           />
         </div>

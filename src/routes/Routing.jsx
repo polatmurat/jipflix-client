@@ -1,33 +1,46 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginAdmin from "../pages/auth/LoginAdmin";
-import Products from "../pages/dashboard/Products";
+import Movies from "../pages/dashboard/Movies";
 import Private from "./Private";
 import Public from "./Public";
 import Categories from "../pages/dashboard/Categories";
 import CreateCategory from "../pages/dashboard/CreateCategory";
 import UpdateCategory from "../pages/dashboard/UpdateCategory";
-import CreateProduct from "../pages/dashboard/CreateProduct";
-import UpdateProduct from "../pages/dashboard/UpdateProduct";
+import Directors from "../pages/dashboard/Directors";
+import CreateDirector from "../pages/dashboard/CreateDirector";
+import UpdateDirector from "../pages/dashboard/UpdateDirector";
+import CreateMovie from "../pages/dashboard/CreateMovie";
+import UpdateMovie from "../pages/dashboard/UpdateMovie";
 import Home from "../pages/home/Home";
 import Login from "../pages/home/auth/Login";
 import Register from "../pages/home/auth/Register";
 import Dashboard from "../pages/users/Dashboard";
 import Notifications from "../pages/users/Notifications";
+import Users from "../pages/dashboard/Users";
+import SendNotification from "../pages/dashboard/SendNotification";
+import Logs from "../pages/dashboard/Logs";
 import UserRoute from "./UserRoute";
 import UserAuthRoute from "./UserAuthRoute";
-import CategoryProducts from "../pages/home/CategoryProducts";
+import MovieDetails from "../pages/home/MovieDetails";
+import GenreMovies from "../pages/home/GenreMovies";
+import AllMovies from "../pages/home/AllMovies";
+import OAuthCallback from "../pages/auth/OAuthCallback";
 
 const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/category-products/:name" element={<CategoryProducts />} />
-        <Route path="/category-products/:name/:page" element={<CategoryProducts />} />
+        <Route path="/genre/:id" element={<GenreMovies />} />
+        <Route path="/genre/:id/:page" element={<GenreMovies />} />
+        <Route path="/movies" element={<AllMovies />} />
+        <Route path="/movies/:page" element={<AllMovies />} />
+        <Route path="/movie/:id" element={<MovieDetails />} />
         <Route element={<UserAuthRoute />}>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
+        <Route path="/login/oauth2/code/google" element={<OAuthCallback />} />
         <Route element={<UserRoute />}>
           <Route path="user" element={<Dashboard />} />
           <Route path="notifications" element={<Notifications />} />
@@ -45,26 +58,26 @@ const Routing = () => {
         {/* auth/login-admin */}
         <Route path="dashboard">
           <Route
-            path="products"
+            path="movies"
             element={
               <Private>
-                <Products />
+                <Movies />
               </Private>
             }
           />
           <Route
-            path="products/:page"
+            path="movies/:page"
             element={
               <Private>
-                <Products />
+                <Movies />
               </Private>
             }
           />
           <Route
-            path="update-product/:id"
+            path="update-movie/:id"
             element={
               <Private>
-                <UpdateProduct />
+                <UpdateMovie />
               </Private>
             }
           />
@@ -85,6 +98,14 @@ const Routing = () => {
             }
           />
           <Route
+            path="directors/:page"
+            element={
+              <Private>
+                <Directors />
+              </Private>
+            }
+          />
+          <Route
             path="create-category"
             element={
               <Private>
@@ -101,10 +122,58 @@ const Routing = () => {
             }
           />
           <Route
-            path="create-product"
+            path="create-movie"
             element={
               <Private>
-                <CreateProduct />
+                <CreateMovie />
+              </Private>
+            }
+          />
+          <Route
+            path="users"
+            element={
+              <Private>
+                <Users />
+              </Private>
+            }
+          />
+          <Route
+            path="send-notification"
+            element={
+              <Private>
+                <SendNotification />
+              </Private>
+            }
+          />
+          <Route
+            path="logs/:tab"
+            element={
+              <Private>
+                <Logs />
+              </Private>
+            }
+          />
+          <Route
+            path="directors"
+            element={
+              <Private>
+                <Directors />
+              </Private>
+            }
+          />
+          <Route
+            path="create-director"
+            element={
+              <Private>
+                <CreateDirector />
+              </Private>
+            }
+          />
+          <Route
+            path="update-director/:id"
+            element={
+              <Private>
+                <UpdateDirector />
               </Private>
             }
           />

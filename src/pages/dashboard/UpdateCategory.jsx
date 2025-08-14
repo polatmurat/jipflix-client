@@ -5,10 +5,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSuccess } from "../../app/reducers/globalReducer";
-import {
-  useFetchCategoryQuery,
-  useUpdateCategoryMutation,
-} from "../../features/category/categoryService";
+import { useGetGenresQuery, useUpdateGenreMutation } from "../../features/genre/genresService";
 import Spinner from "../../components/Spinner";
 
 const UpdateCategory = () => {
@@ -18,22 +15,21 @@ const UpdateCategory = () => {
 
   const [state, setState] = useState("");
   const { id } = useParams();
-  const { data, isFetching } = useFetchCategoryQuery(id);
+  const { data, isFetching } = useGetGenresQuery();
 
   useEffect(() => {
-    if (data?.category) {
-      setState(data.category.name);
-    }
-  }, [data?.category]);
+    const g = (data?.result || []).find(x => String(x.id) === String(id));
+    if (g) setState(g.name);
+  }, [data?.result, id]);
 
-  const [saveCategory, response] = useUpdateCategoryMutation();
+  const [saveCategory, response] = useUpdateGenreMutation();
 
   const errors = response?.error?.data?.errors
     ? response?.error?.data?.errors
     : [];
   const updateSubmit = (event) => {
     event.preventDefault();
-    saveCategory({ name: state, id: id });
+    saveCategory({ id, body: { name: state } });
   };
 
 
@@ -52,13 +48,13 @@ const UpdateCategory = () => {
           className="btn-dark inline-flex items-center"
         >
           <BsArrowLeft className="mr-2" />
-          Category List
+           Genres List
         </Link>
       </ScreenHeader>
       {success && <div className="alert-success md:w-8/12">{success}</div>}
       {!isFetching ? (
         <form className="w-full md:w-8/12" onSubmit={updateSubmit}>
-          <h3 className="text-lg capitalize mb-3">Update Category</h3>
+          <h3 className="text-lg capitalize mb-3">Update Genre</h3>
           {errors.length > 0 &&
             errors.map((error, key) => (
               <div key={key} className="my-4">
@@ -72,7 +68,7 @@ const UpdateCategory = () => {
               value={state}
               onChange={(e) => setState(e.target.value)}
               className="form-control"
-              placeholder="Category Name..."
+             placeholder="Genre Name..."
             />
           </div>
           <div className="mb-3 flex justify-center">

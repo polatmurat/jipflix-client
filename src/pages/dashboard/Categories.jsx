@@ -1,35 +1,31 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ScreenHeader from "../../components/ScreenHeader";
 import Wrapper from "./Wrapper";
 import { BsPlusLg } from "react-icons/bs";
 import { clearMessage, setSuccess } from "../../app/reducers/globalReducer";
-import {
-  useGetQuery,
-  useDeleteCategoryMutation,
-} from "../../features/category/categoryService";
+import { useGetGenresQuery, useDeleteGenreMutation } from "../../features/genre/genresService";
 import Spinner from "../../components/Spinner";
 import Pagination from "../../components/Pagination";
 
 const Categories = () => {
   const { success } = useSelector((state) => state.globalReducer);
+  const { page: pageParam } = useParams();
+  const [query, setQuery] = useState("");
+  const page = pageParam ? parseInt(pageParam) : 1;
+  const perPage = 12;
 
-  let { page } = useParams();
-
-  const { data = [], isFetching } = useGetQuery(page ? page : 1);
-
-  if (!page) {
-    page = 1;
-  }
+  const { data, isFetching, refetch } = useGetGenresQuery();
 
   const dispatch = useDispatch();
 
-  const [removeCategory, response] = useDeleteCategoryMutation();
+  const [removeCategory, response] = useDeleteGenreMutation();
   console.log(response, " RESPONSE REMOVE");
   const delCategory = (id) => {
-    if (window.confirm("This category will be deleted, are you sure?")) {
+    if (window.confirm("This genre will be deleted, are you sure?")) {
       removeCategory(id);
+      refetch();
     }
   };
 
@@ -59,12 +55,21 @@ const Categories = () => {
           className="btn-dark inline-flex items-center"
         >
           <BsPlusLg className="mr-2" />
-          Add Categories
+          Add Genres
         </Link>
       </ScreenHeader>
+      <div className="mb-4">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="form-control w-full md:w-4/12"
+          placeholder="Search genres..."
+        />
+      </div>
       {success && <div className="alert-success md:w-8/12">{success}</div>}
       {!isFetching ? (
-        data?.categories?.length > 0 && (
+        (data?.result?.length || 0) > 0 && (
           <>
             <div className="mb-4">
               <table className="w-full bg-palette1 rounded-md">
@@ -82,14 +87,19 @@ const Categories = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.categories?.map((category) => (
-                    <tr key={category._id} className="odd:bg-gray-800">
+                  {(() => {
+                    const all = data?.result || [];
+                    const filtered = query ? all.filter(g => g.name.toLowerCase().includes(query.toLowerCase())) : all;
+                    const start = (page - 1) * perPage;
+                    const items = filtered.slice(start, start + perPage);
+                    return items.map((category) => (
+                    <tr key={category.id} className="odd:bg-gray-800">
                       <td className="p-3 capitalize text-sm font-normal text-gray-400">
                         {category.name}
                       </td>
                       <td className="p-3 capitalize text-sm font-normal text-gray-400">
                         <Link
-                          to={`/dashboard/update-category/${category._id}`}
+                          to={`/dashboard/update-category/${category.id}`}
                           className="bg-palette4 w-1/4 px-5 py-2 cursor-pointer text-white rounded-md"
                         >
                           Edit
@@ -98,22 +108,28 @@ const Categories = () => {
                       <td className="p-3 capitalize text-sm font-normal text-gray-400">
                         <a
                           className="bg-red-500 w-1/4 px-4 py-2 cursor-pointer text-white rounded-md"
-                          onClick={() => delCategory(category._id)}
+                          onClick={() => delCategory(category.id)}
                         >
                           Delete
                         </a>
                       </td>
                     </tr>
-                  ))}
+                    ));
+                  })()}
                 </tbody>
               </table>
             </div>
-            <Pagination
-              page={parseInt(page)}
-              perPage={data.perPage}
-              count={data.count}
-              path="dashboard/categories"
-            />
+            {(() => {
+              const total = (query ? (data?.result || []).filter(g => g.name.toLowerCase().includes(query.toLowerCase())).length : (data?.result || []).length);
+              return (
+                <Pagination
+                  page={page}
+                  perPage={perPage}
+                  count={total}
+                  path="dashboard/categories"
+                />
+              );
+            })()}
           </>
         )
       ) : (

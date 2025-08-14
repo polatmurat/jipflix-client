@@ -1,6 +1,7 @@
-import Categories from "../../components/home/Categories";
+import PopularMovies from "../../components/home/PopularMovies";
 import Nav from "../../components/home/Nav";
 import Slider from "../../components/home/Slider";
+import MoviesSection from "../../components/home/MoviesSection";
 
 const Home = () => {
   return (
@@ -9,8 +10,9 @@ const Home = () => {
       <div className="mt-[50px]">
         <Slider />
       </div>
-      <div className="container mt-10">
-        <Categories />
+      <div className="container py-16 space-y-16">
+        <PopularMovies />
+        <MoviesSection />
       </div>
     </>
   );

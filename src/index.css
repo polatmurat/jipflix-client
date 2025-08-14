@@ -70,6 +70,20 @@
   .heading {
     @apply text-lg capitalize font-medium;
   }
+  
+  /* Modern button improvements */
+  .btn {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  
+  .btn:hover {
+    @apply transform -translate-y-0.5 shadow-lg;
+  }
+  
+  /* Netflix style gradient underline */
+  .netflix-gradient {
+    @apply bg-gradient-to-r from-red-600 to-red-500 rounded-full;
+  }
   .form-label {
     @apply block mb-1.5 text-sm font-medium capitalize text-gray-700;
   }
