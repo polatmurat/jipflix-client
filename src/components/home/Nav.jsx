@@ -15,7 +15,7 @@ const Nav = () => {
   const unreadCount = (notifResp?.result?.items || []).filter(n => !n.read).length;
 
   return (
-    <nav className="w-full h-[70px] flex items-center shadow-md fixed top-0 right-0 left-0 z-50 bg-white">
+    <nav className="w-full h-[70px] flex items-center fixed top-0 right-0 left-0 z-50 bg-white/0 backdrop-blur-xs border-b border-white/0 shadow-lg">
       <div className="container">
         <div className="flex justify-between items-center">
           <Link to="/">
@@ -29,7 +29,7 @@ const Nav = () => {
             <li className="nav__item cursor-pointer">
               <button
                 onClick={() => setIsSearchModalOpen(true)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="p-2 hover:bg-white/40 rounded-lg transition-colors duration-200"
               >
                 <BsSearch size={22} />
               </button>
